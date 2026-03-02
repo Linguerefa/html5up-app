@@ -55,11 +55,11 @@ jobs:
 
       - name: Stop existing container
         run: |
-          try { docker stop $env:IMAGE_NAME } catch { Write-Host "Container not running" }
+          docker stop $env:IMAGE_NAME -ErrorAction SilentlyContinue
 
       - name: Remove old container
         run: |
-          try { docker rm $env:IMAGE_NAME } catch { Write-Host "Container not found" }
+          docker rm $env:IMAGE_NAME -ErrorAction SilentlyContinue
 
       - name: Run new container
         run: |
