@@ -55,11 +55,21 @@ jobs:
 
       - name: Stop existing container
         run: |
-          try { docker stop $env:IMAGE_NAME } catch { Write-Host "Container not running" }
+          $container = docker ps -q -f name=$env:IMAGE_NAME
+          if ($container) {
+            docker stop $env:IMAGE_NAME
+          } else {
+            Write-Host "Container not running"
+          }
 
       - name: Remove old container
         run: |
-          try { docker rm $env:IMAGE_NAME } catch { Write-Host "Container not found" }
+          $container = docker ps -a -q -f name=$env:IMAGE_NAME
+          if ($container) {
+            docker rm $env:IMAGE_NAME
+          } else {
+            Write-Host "Container not found"
+          }
 
       - name: Run new container
         run: |
